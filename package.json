@@ -1,0 +1,11 @@
+{
+  "name": "ricerco-utils",
+  "version": "1.0.0",
+  "description": "C++ bindings for the Ricerco application.",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+	"start": "node index.js"
+  }
+}
