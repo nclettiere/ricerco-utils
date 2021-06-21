@@ -1,15 +1,23 @@
 {
   "name": "ricerco-utils",
-  "version": "1.0.0",
-  "author": "",
+  "version": "0.1.0",
   "description": "C++ fileSystem OS specific bindings for the Ricerco application.",
   "main": "index.js",
   "license": "MIT",
   "private": false,
   "gypfile": true,
   "author": "Nicolas C. Lettiere (https://github.com/nclettiere/)",
+  "repository": "https://github.com/nclettiere/ricerco-utils",
+  "dependencies": {},
+  "devDependencies": {},
+  "keywords": [
+    "addon"
+  ],
+  "engines": {
+    "node": ">=0.8.x"
+  },
   "scripts": {
-    "dev": "node test.js",
+    "dev": "node test/test.js",
     "install": "node-gyp rebuild"
   }
 }
