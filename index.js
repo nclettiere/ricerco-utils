@@ -1,3 +1,1 @@
-const calculate = require('./build/Release/calculate');
-
-console.log(calculate.calc());
+module.exports = require('./build/Release/filemanager.node');

@@ -1,19 +1,38 @@
 #include <node.h>
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <codecvt>
 #include <windows.h>
 #include <shobjidl.h>
 
 namespace filemanager
 {
     using v8::FunctionCallbackInfo;
+    using v8::ReturnValue;
     using v8::Isolate;
     using v8::Local;
     using v8::Number;
     using v8::Object;
+    using v8::String;
+    using v8::NewStringType;
     using v8::Value;
+    using v8::MaybeLocal;
 
-    // Select folder dialogue for Windows. (Min req. Win > XP)
-    void SelectFolderDialogue()
+    std::string wstr2str(const std::wstring &wstr)
     {
+        using convert_typeX = std::codecvt_utf8<wchar_t>;
+        std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+        return converterX.to_bytes(wstr);
+    }
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    // Select folder dialogue for Windows. (Min req. Win > XP)
+    std::string SelectFolderDialogue()
+    {
+        std::wostringstream woss;
+
         HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED |
                                               COINIT_DISABLE_OLE1DDE);
         if (SUCCEEDED(hr))
@@ -26,14 +45,13 @@ namespace filemanager
 
             if (SUCCEEDED(hr))
             {
+                pFileOpen->SetOptions(FOS_PICKFOLDERS);
                 // Show the Open dialog box.
                 hr = pFileOpen->Show(NULL);
 
                 // Get the file name from the dialog box.
                 if (SUCCEEDED(hr))
                 {
-                    pFileOpen->SetOptions(FOS_PICKFOLDERS);
-
                     IShellItem *pItem;
                     hr = pFileOpen->GetResult(&pItem);
                     if (SUCCEEDED(hr))
@@ -44,7 +62,8 @@ namespace filemanager
                         // Display the file name to the user.
                         if (SUCCEEDED(hr))
                         {
-                            MessageBoxW(NULL, pszFilePath, L"File Path", MB_OK);
+                            //MessageBoxW(NULL, pszFilePath, L"File Path", MB_OK);
+                            woss << pszFilePath;
                             CoTaskMemFree(pszFilePath);
                         }
                         pItem->Release();
@@ -54,23 +73,20 @@ namespace filemanager
             }
             CoUninitialize();
         }
-        return 0;
+        return wstr2str(woss.str());
     }
+#elif defined(__APPLE__) // |
+#elif defined(__linux__) // ---> TODO !
+#endif
 
     void SelFolder(const FunctionCallbackInfo<Value> &args)
     {
+        const char * folderPath = SelectFolderDialogue().c_str();
         Isolate *isolate = args.GetIsolate();
-
-        int i;
-        double x = 20, y = 2;
-
-        for (i = 0; i < 200; i++)
-        {
-            x += y;
-        }
-
-        auto total = Number::New(isolate, x);
-        args.GetReturnValue().Set(total);
+        MaybeLocal<String> str = String::NewFromUtf8(isolate, folderPath, NewStringType::kNormal);
+        Local<String> checkedString = str.ToLocalChecked();
+        ReturnValue<Value> retVal = args.GetReturnValue();
+        retVal.Set(checkedString);
     }
 
     void Initialize(Local<Object> exports)
