@@ -8,7 +8,9 @@
   "gypfile": true,
   "author": "Nicolas C. Lettiere (https://github.com/nclettiere/)",
   "repository": "https://github.com/nclettiere/ricerco-utils",
-  "dependencies": {},
+  "dependencies": {
+    "node-addon-api": "^4.0.0"
+  },
   "devDependencies": {},
   "keywords": [
     "addon"

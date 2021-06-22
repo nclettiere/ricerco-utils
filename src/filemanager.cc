@@ -1,4 +1,4 @@
-#include <node.h>
+#include <napi.h>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -6,26 +6,13 @@
 #include <windows.h>
 #include <shobjidl.h>
 
-namespace filemanager
+std::string wstr2str(const std::wstring &wstr)
 {
-    using v8::FunctionCallbackInfo;
-    using v8::ReturnValue;
-    using v8::Isolate;
-    using v8::Local;
-    using v8::Number;
-    using v8::Object;
-    using v8::String;
-    using v8::NewStringType;
-    using v8::Value;
-    using v8::MaybeLocal;
+    using convert_typeX = std::codecvt_utf8<wchar_t>;
+    std::wstring_convert<convert_typeX, wchar_t> converterX;
 
-    std::string wstr2str(const std::wstring &wstr)
-    {
-        using convert_typeX = std::codecvt_utf8<wchar_t>;
-        std::wstring_convert<convert_typeX, wchar_t> converterX;
-
-        return converterX.to_bytes(wstr);
-    }
+    return converterX.to_bytes(wstr);
+}
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     // Select folder dialogue for Windows. (Min req. Win > XP)
@@ -79,20 +66,19 @@ namespace filemanager
 #elif defined(__linux__) // ---> TODO !
 #endif
 
-    void SelFolder(const FunctionCallbackInfo<Value> &args)
-    {
-        const char * folderPath = SelectFolderDialogue().c_str();
-        Isolate *isolate = args.GetIsolate();
-        MaybeLocal<String> str = String::NewFromUtf8(isolate, folderPath, NewStringType::kNormal);
-        Local<String> checkedString = str.ToLocalChecked();
-        ReturnValue<Value> retVal = args.GetReturnValue();
-        retVal.Set(checkedString);
-    }
+Napi::Value SelFolder(const Napi::CallbackInfo& info) {
+Napi::Env env = info.Env();
 
-    void Initialize(Local<Object> exports)
-    {
-        NODE_SET_METHOD(exports, "select_folder_dialogue", SelFolder);
-    }
+const char * folderPath = SelectFolderDialogue().c_str();
 
-    NODE_MODULE(NODE_GYP_MODULE_NAME, Initialize);
+Napi::String resultStringPath = Napi::String::New(env, folderPath);
+return resultStringPath;
 }
+
+Napi::Object Init(Napi::Env env, Napi::Object exports) {
+exports.Set(Napi::String::New(env, "select_folder_dialogue"),
+			Napi::Function::New(env, SelFolder));
+return exports;
+}
+
+NODE_API_MODULE(filemanager, Init)

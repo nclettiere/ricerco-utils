@@ -1,2 +1,2 @@
-const filemanager = require('./build/Release/filemanager.node');
+const filemanager = require('../index').filemanager;
 console.log(filemanager?.select_folder_dialogue());
