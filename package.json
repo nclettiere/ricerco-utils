@@ -1,6 +1,6 @@
 {
   "name": "ricerco-utils",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "C++ fileSystem OS specific bindings for the Ricerco application.",
   "main": "index.js",
   "license": "MIT",
