@@ -3,8 +3,12 @@
 #include <string>
 #include <sstream>
 #include <codecvt>
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+#define ISWIN
 #include <windows.h>
 #include <shobjidl.h>
+#endif
 
 std::string wstr2str(const std::wstring &wstr)
 {
@@ -14,24 +18,12 @@ std::string wstr2str(const std::wstring &wstr)
   return converterX.to_bytes(wstr);
 }
 
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+#ifdef ISWIN
 // Select folder dialogue for Windows. (Min req. Win > XP)
-std::string SelectFolderDialogue(HWND hwnd)
+std::string SelectFolderDialogue(HWND* hWndParent )
 {
-  if (hwnd != NULL)
-  {
-    EnableWindow(hwnd, false);
-    std::cout << "HWND SEEMS OK\n";
-
-    DWORD pid = 0;
-    GetWindowThreadProcessId(hwnd, &pid);
-
-    printf("PID: %d", pid);
-  }
-  else
-  {
-    std::cout << "HWND IS NULL\n";
-  }
+  if (hWndParent  != NULL)
+    EnableWindow(*hWndParent , FALSE);
 
   std::wostringstream woss;
 
@@ -75,6 +67,10 @@ std::string SelectFolderDialogue(HWND hwnd)
     }
     CoUninitialize();
   }
+
+  if (hWndParent  != NULL)
+    EnableWindow(*hWndParent , TRUE);
+
   return wstr2str(woss.str());
 }
 #elif defined(__APPLE__) // |
@@ -89,17 +85,27 @@ static HWND UnpackParentWindow(void *wndHandle)
 Napi::Value SelFolder(const Napi::CallbackInfo &info)
 {
   Napi::Env env = info.Env();
+  Napi::String resultStringPath;
 
-  HWND hwnd;
+#ifdef ISWIN
+  // Get HWND of the parent window to disable it while the dialogue box is open.
+  HWND* hWndParent ;
   if (info[0].IsBuffer())
   {
-    hwnd = UnpackParentWindow(info[0].As<Napi::Buffer<void *>>());
-    std::cout << "info[0] IS Buffer\n";
+    Napi::Buffer<HWND> buf = info[0].As<Napi::Buffer<HWND>>();
+    hWndParent = buf.Data();
   }
 
-  const char *folderPath = SelectFolderDialogue(hwnd).c_str();
+  const char *folderPath = SelectFolderDialogue(hWndParent).c_str();
 
-  Napi::String resultStringPath = Napi::String::New(env, folderPath);
+  resultStringPath = Napi::String::New(env, folderPath);
+
+
+  if(hWndParent != NULL) {
+    SetFocus(*hWndParent);
+  }
+#endif
+
   return resultStringPath;
 }
 
