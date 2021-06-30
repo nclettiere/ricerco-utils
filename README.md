@@ -11,12 +11,19 @@ npm i ricerco-utils
 Usage
 ```javascript
 const filemanager = require('ricerco-utils').filemanager;
-console.log(filemanager.select_folder_dialogue());
+console.log(filemanager.select_folder_dialogue( --> Buffer containing a window handle (Only supports HWND for now) <-- ));
 ```
 
-Current libraries: 
-  - filemanager features:
-    <p>allows user to access OS "select folder" which is forbidden by modern browsers and cannot be accessed by JS itself.</p>
-  
+Example in electron:
+```javascript
+const folderPath = filemanager.select_folder_dialogue(
+    mainWindow?.getNativeWindowHandle()
+);
+```
+
 TODO:
-  MacOS and Linux support and pre-built binaries.
+  - MacOS and Linux support.
+  - pre-built binaries.
+
+Dependencies:
+  - [header-only filesystem by gulrak](https://github.com/gulrak/filesystem)
