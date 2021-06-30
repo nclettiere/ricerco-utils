@@ -1,7 +1,7 @@
 # ricerco-utils
 C++ bindings for the Ricerco application.
 
-Allows to access OS specific code.
+Allows to access OS specific filesystem features which are not present on Node.js applications.
 
 Install
 ```shell
