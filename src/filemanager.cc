@@ -10,6 +10,19 @@
 #include <shobjidl.h>
 #endif
 
+// Filesystem library
+#if defined(__cplusplus) && __cplusplus >= 201703L && defined(__has_include)
+#if __has_include(<filesystem>)
+#define GHC_USE_STD_FS
+#include <filesystem>
+namespace fs = std::filesystem;
+#endif
+#endif
+#ifndef GHC_USE_STD_FS
+#include <ghc/filesystem.hpp>
+namespace fs = ghc::filesystem;
+#endif
+
 std::string wstr2str(const std::wstring &wstr)
 {
   using convert_typeX = std::codecvt_utf8<wchar_t>;
@@ -20,10 +33,10 @@ std::string wstr2str(const std::wstring &wstr)
 
 #ifdef ISWIN
 // Select folder dialogue for Windows. (Min req. Win > XP)
-std::string SelectFolderDialogue(HWND* hWndParent )
+std::string SelectFolderDialogue(HWND *hWndParent)
 {
-  if (hWndParent  != NULL)
-    EnableWindow(*hWndParent , FALSE);
+  if (hWndParent != NULL)
+    EnableWindow(*hWndParent, FALSE);
 
   std::wostringstream woss;
 
@@ -68,8 +81,8 @@ std::string SelectFolderDialogue(HWND* hWndParent )
     CoUninitialize();
   }
 
-  if (hWndParent  != NULL)
-    EnableWindow(*hWndParent , TRUE);
+  if (hWndParent != NULL)
+    EnableWindow(*hWndParent, TRUE);
 
   return wstr2str(woss.str());
 }
@@ -87,9 +100,15 @@ Napi::Value SelFolder(const Napi::CallbackInfo &info)
   Napi::Env env = info.Env();
   Napi::String resultStringPath;
 
+  auto fPath = fs::path("C:\\Users\\Nicolini\\.Ricerco");
+
+  std::cout << " IsAbs:  " + fs::path("C:\\Users\\Nicolini\\.Ricerco").generic_u8string() << " - "
+            << "\n";
+
 #ifdef ISWIN
+  MessageBoxW(NULL, L"a", fs::path("C:\\Users\\Nicolini\\.Ricerco\\xd").generic_wstring().c_str(), MB_OK);
   // Get HWND of the parent window to disable it while the dialogue box is open.
-  HWND* hWndParent ;
+  HWND *hWndParent;
   if (info[0].IsBuffer())
   {
     Napi::Buffer<HWND> buf = info[0].As<Napi::Buffer<HWND>>();
@@ -100,8 +119,8 @@ Napi::Value SelFolder(const Napi::CallbackInfo &info)
 
   resultStringPath = Napi::String::New(env, folderPath);
 
-
-  if(hWndParent != NULL) {
+  if (hWndParent != NULL)
+  {
     SetFocus(*hWndParent);
   }
 #endif
