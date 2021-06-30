@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-2019
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -16,7 +16,7 @@ jobs:
 
   publish-gpr:
     needs: build
-    runs-on: windows-2019
+    runs-on: self-hosted
     permissions:
       packages: write
       contents: read
