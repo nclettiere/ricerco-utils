@@ -1,2 +1,2 @@
-const filemanager = require('./build/Release/filemanager.node');
+const filemanager = require('./build/Release/filemanager');
 module.exports.filemanager = filemanager;

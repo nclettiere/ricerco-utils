@@ -4,6 +4,12 @@
 #include <sstream>
 #include <codecvt>
 
+#include <boost/uuid/uuid.hpp>            // uuid class
+#include <boost/uuid/uuid_generators.hpp> // generators
+#include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
+
+#include <boost/filesystem/operations.hpp>
+
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 #define ISWIN
 #include <windows.h>
@@ -11,17 +17,7 @@
 #endif
 
 // Filesystem library
-#if defined(__cplusplus) && __cplusplus >= 201703L && defined(__has_include)
-#if __has_include(<filesystem>)
-#define GHC_USE_STD_FS
-#include <filesystem>
-namespace fs = std::filesystem;
-#endif
-#endif
-#ifndef GHC_USE_STD_FS
-#include <ghc/filesystem.hpp>
-namespace fs = ghc::filesystem;
-#endif
+namespace fs = boost::filesystem;
 
 std::string wstr2str(const std::wstring &wstr)
 {
@@ -100,13 +96,42 @@ Napi::Value SelFolder(const Napi::CallbackInfo &info)
   Napi::Env env = info.Env();
   Napi::String resultStringPath;
 
-  auto fPath = fs::path("C:\\Users\\Nicolini\\.Ricerco");
+  boost::uuids::random_generator generator;
 
-  std::cout << " IsAbs:  " + fs::path("C:\\Users\\Nicolini\\.Ricerco").generic_u8string() << " - "
-            << "\n";
+  boost::uuids::uuid uuid1 = generator();
+  std::cout << uuid1 << std::endl;
+
+  boost::uuids::uuid uuid2 = generator();
+  std::cout << uuid2 << std::endl;
+
+  std::cout << "sizeof(intmax_t) is " << sizeof(boost::intmax_t) << '\n';
+
+  fs::path p("C:\\Users\\Nicolini\\Documents\\Projects\\ricerco-utils\\binding.gp");
+
+  if (fs::exists(p))
+  {
+    if (fs::is_regular(p))
+    {
+
+      std::cout << "size of "
+                << p
+                << " is " << fs::file_size(p)
+                << std::endl;
+    }
+    else
+    {
+      std::cout << "not a regular file: "
+                << "C:\\Users\\Nicolini\\Documents\\Projects\\ricerco-utils\\binding.gyp" << std::endl;
+    }
+  }
+  else
+  {
+    std::cout << "not found: "
+              << p 
+              << std::endl;
+  }
 
 #ifdef ISWIN
-  MessageBoxW(NULL, L"a", fs::path("C:\\Users\\Nicolini\\.Ricerco\\xd").generic_wstring().c_str(), MB_OK);
   // Get HWND of the parent window to disable it while the dialogue box is open.
   HWND *hWndParent;
   if (info[0].IsBuffer())
