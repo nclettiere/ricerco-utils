@@ -12,3 +12,4 @@ const char * G_homeVar = "~";
 
 const char * G_Path_RicercoBase = ".Ricerco";
 const char * G_Path_RicercoProjectsBase = ".Ricerco/Projects";
+const char * G_Path_RicercoCacheBase = ".Ricerco/Cache";
