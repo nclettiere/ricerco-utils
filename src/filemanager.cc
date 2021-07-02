@@ -4,20 +4,14 @@
 #include <sstream>
 #include <codecvt>
 
+#include "rus_config.hpp"
+#include "Structure.hpp"
+
 #include <boost/uuid/uuid.hpp>            // uuid class
 #include <boost/uuid/uuid_generators.hpp> // generators
 #include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
 
-#include <boost/filesystem/operations.hpp>
-
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-#define ISWIN
-#include <windows.h>
-#include <shobjidl.h>
-#endif
-
-// Filesystem library
-namespace fs = boost::filesystem;
+#include <boost/system/error_code.hpp>
 
 std::string wstr2str(const std::wstring &wstr)
 {
@@ -104,31 +98,15 @@ Napi::Value SelFolder(const Napi::CallbackInfo &info)
   boost::uuids::uuid uuid2 = generator();
   std::cout << uuid2 << std::endl;
 
-  std::cout << "sizeof(intmax_t) is " << sizeof(boost::intmax_t) << '\n';
+  boost::system::error_code ec;
 
-  fs::path p("C:\\Users\\Nicolini\\Documents\\Projects\\ricerco-utils\\binding.gp");
-
-  if (fs::exists(p))
+  if (rus::GenerateBaseDirs(ec))
   {
-    if (fs::is_regular(p))
-    {
-
-      std::cout << "size of "
-                << p
-                << " is " << fs::file_size(p)
-                << std::endl;
-    }
-    else
-    {
-      std::cout << "not a regular file: "
-                << "C:\\Users\\Nicolini\\Documents\\Projects\\ricerco-utils\\binding.gyp" << std::endl;
-    }
+    std::cout << "GenerateBaseDirs Success" << std::endl;
   }
   else
   {
-    std::cout << "not found: "
-              << p 
-              << std::endl;
+    std::cout << "GenerateBaseDirs Error: " << ec.message() << std::endl;
   }
 
 #ifdef ISWIN

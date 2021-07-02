@@ -19,7 +19,7 @@
     "node": ">=0.8.x"
   },
   "scripts": {
-    "dev": "node test/test.js",
+    "devi": "node test/test.js",
     "install": "node-gyp rebuild"
   }
 }
