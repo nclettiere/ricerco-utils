@@ -5,10 +5,13 @@
             "cflags!": ["-fexceptions"],
             "cflags_cc!": ["-fexceptions"],
             "sources": [
+                "<!@(node -p \"require('fs').readdirSync('./src/Structure').map(f=>'src/Structure/'+f).join(' ')\")",
+                "<!@(node -p \"require('fs').readdirSync('./src/Project').map(f=>'src/Project/'+f).join(' ')\")",
                 "<!@(node -p \"require('fs').readdirSync('./src').map(f=>'src/'+f).join(' ')\")"
             ],
             "include_dirs": [
                 "<!@(node -p \"require('node-addon-api').include\")",
+                "./include",
                 "vendor/filesystem/include",
                 "vendor/boost"
             ],

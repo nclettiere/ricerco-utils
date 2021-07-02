@@ -4,12 +4,14 @@
 #include <sstream>
 #include <codecvt>
 
-#include "rus_config.hpp"
-#include "Structure.hpp"
+#include <rus_config.hpp>
 
-#include <boost/uuid/uuid.hpp>            // uuid class
-#include <boost/uuid/uuid_generators.hpp> // generators
-#include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
+#include <Structure/Structure.hpp>
+#include <Project/Project.hpp>
+
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
 
 #include <boost/system/error_code.hpp>
 
@@ -100,7 +102,7 @@ Napi::Value SelFolder(const Napi::CallbackInfo &info)
 
   boost::system::error_code ec;
 
-  if (rus::GenerateBaseDirs(ec))
+  if (rus::EnsureBaseStructure(ec))
   {
     std::cout << "GenerateBaseDirs Success" << std::endl;
   }
@@ -108,6 +110,8 @@ Napi::Value SelFolder(const Napi::CallbackInfo &info)
   {
     std::cout << "GenerateBaseDirs Error: " << ec.message() << std::endl;
   }
+
+  rus::Project::CreateProject();
 
 #ifdef ISWIN
   // Get HWND of the parent window to disable it while the dialogue box is open.
