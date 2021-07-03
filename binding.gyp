@@ -13,7 +13,9 @@
                 "<!@(node -p \"require('node-addon-api').include\")",
                 "./include",
                 "vendor/filesystem/include",
-                "vendor/boost"
+                "vendor/boost",
+                "vendor/nlohmann",
+                "vendor/cereal"
             ],
             "defines": ["NAPI_CPP_EXCEPTIONS"],
             "msvs_settings": {

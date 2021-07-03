@@ -45,6 +45,10 @@ namespace rus
 
     bool GenerateProjectStructure(Project &project)
     {
+        std::vector<fs::path> discoverPaths;
+
+        DiscoverProjects(discoverPaths, GetRicercoDir(RicercoDir::Projects));
+
         boost::system::error_code ec;
 
         fs::path projectPaths[5];

@@ -29,7 +29,6 @@ namespace rus
 
         void SetName(std::string &name) { _name = name; }
         void SetDescription(std::string &description) { _description = description; }
-
     protected:
         void GenerateProjectUUID();
 
