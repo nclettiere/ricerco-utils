@@ -3,7 +3,7 @@
         {
             "target_name": "filemanager",
             "cflags!": ["-fexceptions"],
-            "cflags_cc!": ["-fexceptions"],
+            "cflags_cc!": ["-fexceptions", "-std=c++17"],
             "sources": [
                 "<!@(node -p \"require('fs').readdirSync('./src/Structure').map(f=>'src/Structure/'+f).join(' ')\")",
                 "<!@(node -p \"require('fs').readdirSync('./src/Project').map(f=>'src/Project/'+f).join(' ')\")",
@@ -18,11 +18,12 @@
             "defines": ["NAPI_CPP_EXCEPTIONS"],
             "msvs_settings": {
                 "VCCLCompilerTool": {
-                    "ExceptionHandling": 1
+                    "ExceptionHandling": 1,
+                    "AdditionalOptions": ["-std:c++17"]
                 }
             },
             "conditions": [
-                ["OS=='win'", {
+                ["OS=='win' and OS=='win'", {
                     "defines": [
                         "_HAS_EXCEPTIONS=1"
                     ],

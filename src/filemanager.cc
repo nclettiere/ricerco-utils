@@ -111,7 +111,8 @@ Napi::Value SelFolder(const Napi::CallbackInfo &info)
     std::cout << "GenerateBaseDirs Error: " << ec.message() << std::endl;
   }
 
-  rus::Project::CreateProject();
+  rus::Project p("TestProj", "ABC", "abc2");
+  p.CreateProject();
 
 #ifdef ISWIN
   // Get HWND of the parent window to disable it while the dialogue box is open.

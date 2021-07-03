@@ -1,5 +1,5 @@
 #include <Project/Project.hpp>
-#include <Structure/Structure.hpp>
+#include <Structure/ProjectStructure.hpp>
 
 #include <iostream>
 
@@ -35,16 +35,14 @@ namespace rus
     bool Project::CreateProject()
     {
         std::cout << "Creating Project" << std::endl;
+        rus::GenerateProjectStructure(this);
+        return true;
+    }
 
-        boost::system::error_code ec;
-
-        if (rus::EnsureBaseStructure(ec))
-        {
-            std::cout << "GenerateBaseDirs Success" << std::endl;
-        }
-        else
-        {
-            std::cout << "GenerateBaseDirs Error: " << ec.message() << std::endl;
-        }
+    fs::path Project::GetCurrentProjectPath()
+    {
+        if (_modifiedPath.empty())
+            return fs::path(_originalPath);
+        return fs::path((_originalPath != _modifiedPath) ? _modifiedPath : _originalPath);
     }
 }

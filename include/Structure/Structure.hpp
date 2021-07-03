@@ -20,6 +20,6 @@ namespace rus
     };
 
     static std::string GetHomeDir();
-    static fs::path GetRicercoDir(RicercoDir ricercoDir);
+    fs::path GetRicercoDir(RicercoDir ricercoDir);
     bool EnsureBaseStructure(boost::system::error_code &ec);
 }

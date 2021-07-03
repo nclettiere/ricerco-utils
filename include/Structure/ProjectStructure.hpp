@@ -14,7 +14,9 @@ namespace rus
         Items
     };
 
-    static fs::path GetProjectDir(ProjectDir ProjectDir);
+    static fs::path GetProjectDir(ProjectDir projectDir, Project &project);
+    static void GetProjectDirs(fs::path (&paths)[5], Project &project);
+    static fs::path GetProjectDir(ProjectDir ProjectDir, Project &project);
     static bool GenerateProjectStructure(Project &ec);
     static bool CheckProjectIntegrity(Project &ec);
 }
