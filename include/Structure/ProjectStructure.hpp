@@ -35,12 +35,22 @@ namespace rus
             for (auto &entry : boost::make_iterator_range(fs::directory_iterator(whereToFind), {}))
             {
                 fs::path pEntry(entry);
+                bool canContinue = false;
 
-                //while(fs::is_directory())
-                //if(fs::is_directory(entry)) {
-                //}
-                std::cout << entry << "\n";
+                if (is_directory(whereToFind))
+                {
+                    while (!canContinue)
+                    {
+                        for (auto &entry : boost::make_iterator_range(fs::directory_iterator(entry), {}))
+                        {
+                            if (fs::is_directory(entry))
+                            {
+                            }
+                        }
+
+                        std::cout << entry << "\n";
+                    }
+                }
             }
         }
-    }
-} // namespace rus
+    } // namespace rus
