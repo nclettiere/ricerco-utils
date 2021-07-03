@@ -20,7 +20,7 @@ namespace rus
 
     public:
         Project();
-        Project(std::string _name, std::string _description, std::string _originalPath);
+        Project(std::string _name, std::string _description);
         ~Project();
 
     public:
@@ -31,14 +31,9 @@ namespace rus
         void SetDescription(std::string &description) { _description = description; }
 
     protected:
-        std::string _originalPath;
-        std::string _modifiedPath;
-
-    protected:
         void GenerateProjectUUID();
 
     public:
-        fs::path GetCurrentProjectPath();
         bool CreateProject();
     };
 }

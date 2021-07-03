@@ -14,10 +14,9 @@ namespace rus
         GenerateProjectUUID();
     }
 
-    Project::Project(std::string _name, std::string _description, std::string _originalPath)
+    Project::Project(std::string _name, std::string _description)
         : _name(_name),
-          _description(_description),
-          _originalPath(_originalPath)
+          _description(_description)
     {
         GenerateProjectUUID();
     }
@@ -34,15 +33,6 @@ namespace rus
 
     bool Project::CreateProject()
     {
-        std::cout << "Creating Project" << std::endl;
-        rus::GenerateProjectStructure(this);
-        return true;
-    }
-
-    fs::path Project::GetCurrentProjectPath()
-    {
-        if (_modifiedPath.empty())
-            return fs::path(_originalPath);
-        return fs::path((_originalPath != _modifiedPath) ? _modifiedPath : _originalPath);
+        return rus::GenerateProjectStructure(*this);
     }
 }

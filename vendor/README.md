@@ -1,5 +1,7 @@
 ## Dependency List
 
 - Boost (Filesystem && UUID libs)
+- nlohmann's json lib
+- cereal serialization lib
 
-Download [here](https://drive.google.com/file/d/13SP2Sk3ALhK2z0Zo_ZNaedB8F5HCfacX/view?usp=sharing) and unzip onto vendor folder.
+Download [here](https://drive.google.com/file/d/1vK-UI1_L7X78jxLbqUwR20AgFYn6pnjE/view?usp=sharing) and unzip onto vendor folder.

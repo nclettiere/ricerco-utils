@@ -22,6 +22,13 @@
                     "AdditionalOptions": ["-std:c++17"]
                 }
             },
+            "copies":
+            [
+                {
+                    "destination": "<(module_root_dir)/build/Release/default",
+                    "files": ["<(module_root_dir)/default/project_default.json"]
+                }
+            ],
             "conditions": [
                 ["OS=='win' and OS=='win'", {
                     "defines": [

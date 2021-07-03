@@ -1,8 +1,9 @@
 #include <Structure/ProjectStructure.hpp>
-#include <Structure/Structure.hpp>
 
 #include <iostream>
 
+#include <nlohmann/json.hpp>
+#include <cereal/archives/portable_binary.hpp>
 #include <boost/system/error_code.hpp>
 
 namespace rus
@@ -46,25 +47,19 @@ namespace rus
     {
         boost::system::error_code ec;
 
-        if (rus::EnsureBaseStructure(ec))
-        {
-            fs::path projectPaths[5];
-            GetProjectDirs(projectPaths, project);
+        fs::path projectPaths[5];
+        GetProjectDirs(projectPaths, project);
 
-            std::cout << "Wakata" << std::endl;
-            for (size_t i = 0; i < sizeof(projectPaths); i++)
+        for (size_t i = 0; i < 5; i++)
+        {
+            if (!fs::create_directories(projectPaths[i], ec))
             {
-                std::cout << "Creating: " << projectPaths[i].string().c_str() << std::endl;
-                fs::create_directories(projectPaths[i], ec);
+                if (!fs::exists(projectPaths[i]))
+                    return false;
             }
         }
-        else
-        {
-            std::cout << "Could not ensure base directories\n"
-                      << ec.message() << std::endl;
-        }
 
-        return false;
+        return true;
     }
 
     bool CheckProjectIntegrity(Project &project)

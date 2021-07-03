@@ -92,26 +92,11 @@ Napi::Value SelFolder(const Napi::CallbackInfo &info)
   Napi::Env env = info.Env();
   Napi::String resultStringPath;
 
-  boost::uuids::random_generator generator;
-
-  boost::uuids::uuid uuid1 = generator();
-  std::cout << uuid1 << std::endl;
-
-  boost::uuids::uuid uuid2 = generator();
-  std::cout << uuid2 << std::endl;
-
   boost::system::error_code ec;
 
-  if (rus::EnsureBaseStructure(ec))
-  {
-    std::cout << "GenerateBaseDirs Success" << std::endl;
-  }
-  else
-  {
-    std::cout << "GenerateBaseDirs Error: " << ec.message() << std::endl;
-  }
+  rus::EnsureBaseStructure(ec);
 
-  rus::Project p("TestProj", "ABC", "abc2");
+  rus::Project p("TestProj", "ABC");
   p.CreateProject();
 
 #ifdef ISWIN
