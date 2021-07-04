@@ -33,6 +33,6 @@ namespace rus
         void GenerateProjectUUID();
 
     public:
-        bool CreateProject();
+        bool CreateProject(boost::system::error_code &ec);
     };
 }

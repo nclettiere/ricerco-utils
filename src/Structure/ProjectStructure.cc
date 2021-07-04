@@ -5,6 +5,8 @@
 #include <nlohmann/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
 #include <boost/system/error_code.hpp>
+#include <boost/system/error_category.hpp>
+#include <boost/system/errc.hpp>
 
 namespace rus
 {
@@ -34,6 +36,12 @@ namespace rus
         return base / fs::path(project.GetName()) / selectedPath;
     }
 
+    fs::path GetUserProjectBaseDefaultDir(Project &project)
+    {
+        fs::path base = GetRicercoDir(RicercoDir::Projects);
+        return base / fs::path(project.GetName());
+    }
+
     void GetProjectDirs(fs::path (&paths)[5], Project &project)
     {
         paths[0] = GetProjectDir(ProjectDir::Quests, project);
@@ -43,13 +51,20 @@ namespace rus
         paths[4] = GetProjectDir(ProjectDir::Items, project);
     }
 
-    bool GenerateProjectStructure(Project &project)
+    bool GenerateProjectStructure(Project &project, boost::system::error_code &ec)
     {
         std::vector<fs::path> discoverPaths;
-
         DiscoverProjects(discoverPaths, GetRicercoDir(RicercoDir::Projects));
 
-        boost::system::error_code ec;
+        for (auto it = begin(discoverPaths); it != end(discoverPaths); ++it)
+        {
+            // if there is already a project on the DEFAULT directory
+            if (it->string().find(GetUserProjectBaseDefaultDir(project).string()) != std::string::npos)
+            {
+                ec.assign(boost::system::errc::file_exists, boost::system::generic_category());
+                return false;
+            }
+        }
 
         fs::path projectPaths[5];
         GetProjectDirs(projectPaths, project);
@@ -64,6 +79,28 @@ namespace rus
         }
 
         return true;
+    }
+
+    static void DiscoverProjects(std::vector<fs::path> &projectPaths, fs::path &whereToFind)
+    {
+        if (is_directory(whereToFind))
+        {
+            // For all folders in ...whereToFind
+            for (auto &projectFolder : boost::make_iterator_range(fs::directory_iterator(whereToFind), {}))
+            {
+                if (is_directory(projectFolder))
+                {
+                    // Search for project entry file (.rop)
+                    for (auto &pEntry : boost::make_iterator_range(fs::directory_iterator(projectFolder), {}))
+                    {
+                        if (fs::is_regular_file(pEntry) && fs::extension(pEntry) == ".rop")
+                        {
+                            projectPaths.push_back(pEntry);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     bool CheckProjectIntegrity(Project &project)

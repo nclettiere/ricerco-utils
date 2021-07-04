@@ -23,7 +23,7 @@ std::string wstr2str(const std::wstring &wstr)
   return converterX.to_bytes(wstr);
 }
 
-#ifdef ISWIN
+#ifdef RUS_WIN
 // Select folder dialogue for Windows. (Min req. Win > XP)
 std::string SelectFolderDialogue(HWND *hWndParent)
 {
@@ -92,14 +92,22 @@ Napi::Value SelFolder(const Napi::CallbackInfo &info)
   Napi::Env env = info.Env();
   Napi::String resultStringPath;
 
-  boost::system::error_code ec;
+  boost::system::error_code ecEnsure, ecProjCreation;
 
-  rus::EnsureBaseStructure(ec);
+  rus::EnsureBaseStructure(ecEnsure);
 
-  rus::Project p("TestProj", "ABC");
-  p.CreateProject();
+  rus::Project p("TestProj2", "ABC");
+  if (p.CreateProject(ecProjCreation))
+    printf("Project created successfully.\n");
+  else
+  {
+    if (ecProjCreation.value() == 17)
+      printf("Trouble creating project. Cause:\n\tThere is another project in this directory.\n");
+    else
+      printf("Trouble creating project. Cause:\n\t%s\n", ecProjCreation.message());
+  }
 
-#ifdef ISWIN
+#ifdef RUS_WIN
   // Get HWND of the parent window to disable it while the dialogue box is open.
   HWND *hWndParent;
   if (info[0].IsBuffer())
@@ -128,4 +136,4 @@ Napi::Object Init(Napi::Env env, Napi::Object exports)
   return exports;
 }
 
-NODE_API_MODULE(filemanager, Init)
+NODE_API_MODULE(ricerco_utils, Init)

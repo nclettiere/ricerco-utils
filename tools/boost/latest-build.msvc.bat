@@ -1,0 +1,1 @@
+b2 address-model=64 --with-program_options --with-filesystem release runtime-link=static threading=multi

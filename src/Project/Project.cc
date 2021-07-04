@@ -31,8 +31,8 @@ namespace rus
         _uuid = generator();
     }
 
-    bool Project::CreateProject()
+    bool Project::CreateProject(boost::system::error_code &ec)
     {
-        return rus::GenerateProjectStructure(*this);
+        return rus::GenerateProjectStructure(*this, ec);
     }
 }

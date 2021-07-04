@@ -1,7 +1,7 @@
 {
     "targets": [
         {
-            "target_name": "filemanager",
+            "target_name": "ricerco_utils",
             "cflags!": ["-fexceptions"],
             "cflags_cc!": ["-fexceptions", "-std=c++17"],
             "sources": [
@@ -28,15 +28,34 @@
             [
                 {
                     "destination": "<(module_root_dir)/build/Release/default",
-                    "files": ["<(module_root_dir)/default/project_default.json"]
+                    "files": [
+                        "<(module_root_dir)/default/project_default.json"
+                    ]
+                },
+                {
+                    "destination": "<(module_root_dir)/build",
+                    "files": [
+                        "<(module_root_dir)/vendor/boost/libs/win/libboost_filesystem-vc141-mt-s-x64-1_76.lib",
+                        "<(module_root_dir)/vendor/boost/libs/win/libboost_filesystem-vc142-mt-s-x64-1_76.lib"
+                    ]
                 }
             ],
             "conditions": [
-                ["OS=='win' and OS=='win'", {
+                ['OS=="win"' and 'MSVS_VERSION=="2017"', {
                     "defines": [
                         "_HAS_EXCEPTIONS=1"
                     ],
-                    "libraries": ["<(module_root_dir)/vendor/boost/libs/win/libboost_filesystem-vc142-mt-s-x64-1_76.lib"],
+                    "libraries": [
+                        "<(module_root_dir)/vendor/boost/libs/win/libboost_filesystem-vc141-mt-s-x64-1_76.lib"
+                    ],
+                }],
+                ['OS=="win"' and 'MSVS_VERSION=="2019"', {
+                    "defines": [
+                        "_HAS_EXCEPTIONS=1"
+                    ],
+                    "libraries": [
+                        "../vendor/boost/libs/win/libboost_filesystem-vc142-mt-s-x64-1_76.lib"
+                    ],
                 }]
             ]
         }

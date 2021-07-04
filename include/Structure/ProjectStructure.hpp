@@ -23,34 +23,9 @@ namespace rus
     fs::path GetProjectDir(ProjectDir projectDir, Project &project);
     void GetProjectDirs(fs::path (&paths)[5], Project &project);
     fs::path GetProjectDir(ProjectDir ProjectDir, Project &project);
-    bool GenerateProjectStructure(Project &project);
+    fs::path GetUserProjectBaseDefaultDir(Project &project);
+    bool GenerateProjectStructure(Project &project, boost::system::error_code &ec);
     bool CheckProjectIntegrity(Project &project);
 
-    static void DiscoverProjects(std::vector<fs::path> &projectPaths, fs::path &whereToFind)
-    {
-        if (is_directory(whereToFind))
-        {
-            std::cout << whereToFind << " is a directory containing:\n";
-
-            for (auto &entry : boost::make_iterator_range(fs::directory_iterator(whereToFind), {}))
-            {
-                fs::path pEntry(entry);
-                bool canContinue = false;
-
-                if (is_directory(whereToFind))
-                {
-                    while (!canContinue)
-                    {
-                        for (auto &entry : boost::make_iterator_range(fs::directory_iterator(entry), {}))
-                        {
-                            if (fs::is_directory(entry))
-                            {
-                            }
-                        }
-
-                        std::cout << entry << "\n";
-                    }
-                }
-            }
-        }
-    } // namespace rus
+    static void DiscoverProjects(std::vector<fs::path> &projectPaths, fs::path &whereToFind);
+} // namespace rus
