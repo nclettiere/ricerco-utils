@@ -12,5 +12,5 @@ describe("Testing Ricerco Utils libs:", function () {
             console.log("  Testing: ", path);
             return path.match((/^([a-zA-Z]:)?(\\[^<>:"/\\|?*]+)+\\?$/i)) || path === "" || path === null;
         }, "A valid path or an empty string.");
-  });
+  }).timeout(Number.MAX_SAFE_INTEGER);
 });
