@@ -7,6 +7,7 @@
             "sources": [
                 "<!@(node -p \"require('fs').readdirSync('./src/Structure').map(f=>'src/Structure/'+f).join(' ')\")",
                 "<!@(node -p \"require('fs').readdirSync('./src/Project').map(f=>'src/Project/'+f).join(' ')\")",
+                "<!@(node -p \"require('fs').readdirSync('./src/Node').map(f=>'src/Node/'+f).join(' ')\")",
                 "<!@(node -p \"require('fs').readdirSync('./src').map(f=>'src/'+f).join(' ')\")"
             ],
             "include_dirs": [
