@@ -1,5 +1,8 @@
 #include <Node/WindowsUtils.hpp>
 #include <napi.h>
+
+
+#include <windows.h>
 #include <sstream>
 #include <codecvt>
 
@@ -8,8 +11,6 @@
 #ifdef RUS_WIN
 namespace rus
 {
-#include <windows.h>
-
     /**
      * @brief Converts a wstring to a std string. (Only supports english characters and it's very limited.)
      * 
@@ -113,28 +114,4 @@ namespace rus
         return resultStringPath;
     }
 } // namespace rus
-
-Napi::Object Init_WindowsUtils(Napi::Env env, Napi::Object exports)
-{
-    exports.Set(Napi::String::New(env, "select_folder_dialogue"),
-                Napi::Function::New(env, rus::Win_SelFolder));
-    return exports;
-}
-
-#else
-// If not windows always return an error string.
-Napi::Value Win_PlatformErr(const Napi::CallbackInfo &info)
-{
-    Napi::Env env = info.Env();
-    return Napi::String::New(env, "ERRNO_WINDOWS_SUPPORT");
-}
-
-Napi::Object Init_WindowsUtils(Napi::Env env, Napi::Object exports)
-{
-    exports.Set(Napi::String::New(env, "select_folder_dialogue"),
-                Napi::Function::New(env, Win_PlatformErr));
-    return exports;
-}
 #endif
-
-NODE_API_MODULE(rus_windows_utils, Init_WindowsUtils)
