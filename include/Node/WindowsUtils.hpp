@@ -5,7 +5,7 @@
 namespace rus
 {
     /**
-     * @brief Opens a native Windows dialogue to select a folder.
+     * @brief Opens a native Windows dialogue to select a folder. (>=Windows Vista)
      * 
      * @param info This parameter should ONLY contain one argument and must be a JS buffer containg an HWND handle.
      * @return (JS String) returns either the selected dialogue path or an empty string.

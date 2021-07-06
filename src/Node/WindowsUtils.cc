@@ -10,6 +10,11 @@ namespace rus
 {
 #include <windows.h>
 
+    /**
+     * @brief Converts a wstring to a std string. (Only supports english characters and it's very limited.)
+     * 
+     * @deprecated In favor of std::u16string and napi support. This method souldn't be used. See the Win_SelFolder method.
+     */
     std::string wstr2str(const std::wstring &wstr)
     {
         std::string strTo;
@@ -22,7 +27,7 @@ namespace rus
     }
 
     // Select folder dialogue for Windows. (Min req. Win >= Vista)
-    std::string SelectFolderDialogue(HWND *hWndParent)
+    std::wstring SelectFolderDialogue(HWND *hWndParent)
     {
         if (hWndParent != NULL)
             EnableWindow(*hWndParent, FALSE);
@@ -72,7 +77,7 @@ namespace rus
         if (hWndParent != NULL)
             EnableWindow(*hWndParent, TRUE);
 
-        return wstr2str(woss.str());
+        return woss.str();
     }
 
     Napi::Value Win_SelFolder(const Napi::CallbackInfo &info)
@@ -88,9 +93,17 @@ namespace rus
             hWndParent = buf.Data();
         }
 
-        const char *folderPath = SelectFolderDialogue(hWndParent).c_str();
+        std::wstring folderPath = SelectFolderDialogue(hWndParent);
+        /**
+         * WINDOWS ONLY
+         * For cross-platform support:
+         * https://stackoverflow.com/questions/42734715/how-can-i-convert-wstring-to-u16string/42743775#42743775
+         * 
+         */
+        std::u16string u16str(folderPath.begin(), folderPath.end());
+        /***/
 
-        resultStringPath = Napi::String::New(env, folderPath);
+        resultStringPath = Napi::String::From(env, u16str);
 
         if (hWndParent != NULL)
         {
@@ -124,4 +137,4 @@ Napi::Object Init_WindowsUtils(Napi::Env env, Napi::Object exports)
 }
 #endif
 
-NODE_API_MODULE(ricerco_utils, Init_WindowsUtils)
+NODE_API_MODULE(rus_windows_utils, Init_WindowsUtils)
