@@ -1,4 +1,6 @@
 #include <Node/Ricerco.hpp>
+#include <Project/Project.hpp>
+#include <Structure/ProjectStructure.hpp>
 #include <napi.h>
 
 #include <stdio.h>
@@ -8,18 +10,40 @@ namespace rus
     Napi::Value CreateProject(const Napi::CallbackInfo &info)
     {
         Napi::Env env = info.Env();
-        Napi::Object o;
 
-        if(!info.Length >= 1)
-            return false;
+        if (!info.Length() == 1)
+            return Napi::String::New(env, "ERRNO_INVALID_ARGUMENT_NUMBER");
 
         if (info[0].IsObject())
         {
-            Napi::Buffer<HWND> buf = info[0].As<Napi::Buffer<HWND>>();
-            hWndParent = buf.Data();
-        }
+            Napi::Object options = info[0].As<Napi::Object>();
 
-        printf("XD   CreateProject\n");
+            if (!options.Has("name"))
+                return Napi::String::New(env, "ERRNO_INVALID_ARGUMENT : Required entry 'name' could not be found.");
+            if (!options.Has("description"))
+                return Napi::String::New(env, "ERRNO_INVALID_ARGUMENT : Required entry 'description' could not be found.");
+
+            std::u16string name = options.Get("name").As<Napi::String>().Utf16Value();
+            std::u16string desc = options.Get("description").As<Napi::String>().Utf16Value();
+
+            Project newProj(name, desc);
+
+            boost::system::error_code ec;
+            bool success;
+
+            if (options.Has("path"))
+            {
+                const char *path = options.Get("path").As<Napi::String>().Utf16Value().c_str();
+                success = newProj.CreateProject(path, ec);
+            }
+            else
+            {
+                success = newProj.CreateProject(ec);
+            }
+            if (!success)
+                return Napi::String::New(env, "ERRNO_INVALID_ARGUMENT_NUMBER");
+            return Napi::String::New(env, "API_CreateProject_SUCCESS");
+        }
         return Napi::String::New(env, "ABC 1");
     }
 

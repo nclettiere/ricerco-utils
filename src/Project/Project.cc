@@ -2,10 +2,13 @@
 #include <Structure/ProjectStructure.hpp>
 
 #include <iostream>
+#include <string>
 
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/system/error_code.hpp>
+
+#include <rus_config.hpp>
 
 namespace rus
 {
@@ -14,9 +17,23 @@ namespace rus
         GenerateProjectUUID();
     }
 
-    Project::Project(std::string _name, std::string _description)
-        : _name(_name),
-          _description(_description)
+    Project::Project(std::string name, std::string description)
+        : _name(name),
+          _description(description)
+    {
+        GenerateProjectUUID();
+    }
+
+    Project::Project(const char *name, const char *description)
+        : _name(name),
+          _description(description)
+    {
+        GenerateProjectUUID();
+    }
+
+    Project::Project(std::u16string name, std::u16string description)
+        : _name(name.c_str()),
+          _description(description.c_str())
     {
         GenerateProjectUUID();
     }
@@ -34,5 +51,10 @@ namespace rus
     bool Project::CreateProject(boost::system::error_code &ec)
     {
         return rus::GenerateProjectStructure(*this, ec);
+    }
+
+    bool Project::CreateProject(const char *path, boost::system::error_code &ec)
+    {
+        return rus::GenerateProjectStructure(path, *this, ec);
     }
 }

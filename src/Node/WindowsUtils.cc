@@ -1,8 +1,6 @@
 #include <Node/WindowsUtils.hpp>
 #include <napi.h>
 
-
-#include <windows.h>
 #include <sstream>
 #include <codecvt>
 

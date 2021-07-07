@@ -15,12 +15,14 @@ namespace rus
 
     private:
         uuid _uuid;
-        std::string _name;
-        std::string _description;
+        std::wstring _name;
+        std::wstring _description;
 
     public:
         Project();
-        Project(std::string _name, std::string _description);
+        Project(std::string name, std::string description);
+        Project(std::u16string name, std::u16string description);
+        Project(const char *name, const char *description);
         ~Project();
 
     public:
@@ -34,5 +36,6 @@ namespace rus
 
     public:
         bool CreateProject(boost::system::error_code &ec);
+        bool CreateProject(const char *path, boost::system::error_code &ec);
     };
 }
