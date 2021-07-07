@@ -97,7 +97,7 @@ namespace rus
         std::wstring folderPath = SelectFolderDialogue(hWndParent);
         /**
          * WINDOWS ONLY
-         * For cross-platform support:
+         * For a cross-platform support read:
          * https://stackoverflow.com/questions/42734715/how-can-i-convert-wstring-to-u16string/42743775#42743775
          * 
          */
