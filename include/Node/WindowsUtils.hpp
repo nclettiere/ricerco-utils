@@ -13,6 +13,7 @@ namespace rus
      * @author Nicolas Cabrera Lettiere
      */
     Napi::Value Win_SelFolder(const Napi::CallbackInfo &info);
+    std::wstring GetProjectPath(const std::wstring &relative);
 
 } // namespace rus
 #endif

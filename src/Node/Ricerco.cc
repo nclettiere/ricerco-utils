@@ -33,21 +33,30 @@ namespace rus
             Project newProj(name, desc);
 
             boost::system::error_code ec;
-            bool success;
+            bool pCreationSuccess;
 
+            // Create the project
             if (options.Has("path"))
             {
                 std::wstring path;
-                std::string u16path = options.Get("path").As<Napi::String>().Utf16Value();
+                std::u16string u16path = options.Get("path").As<Napi::String>().Utf16Value();
                 path.assign(u16path.begin(), u16path.end());
-                success = newProj.CreateProject(path, ec);
+                pCreationSuccess = newProj.CreateProject(path, ec);
             }
             else
             {
-                success = newProj.CreateProject(ec);
+                pCreationSuccess = newProj.CreateProject(ec);
             }
-            if (!success)
-                return Napi::String::New(env, "ERRNO_INVALID_ARGUMENT_NUMBER");
+            if (!pCreationSuccess)
+                return Napi::String::New(env, ec.message());
+
+            // Copy the selected template (or use the default)
+            if (!options.Has("template"))
+            {
+                // load default
+                rus::CopyTemplate(newProj, rus::ProjectTemplate::Default);
+            }
+
             return Napi::String::New(env, "API_CreateProject_SUCCESS");
         }
         return Napi::String::New(env, "ABC 1");

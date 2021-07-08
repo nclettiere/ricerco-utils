@@ -170,6 +170,40 @@ namespace rus
         }
     }
 
+    fs::path GetTemplatePath(ProjectTemplate templ)
+    {
+        //fs::path defaultFolder = fs::canonical("./default");
+        fs::path finalPath;
+        //switch (templ)
+        //{
+        //case ProjectTemplate::Default:
+        //    finalPath = fs::path(defaultFolder / "project_default.json");
+        //    break;
+        //}
+
+#ifdef RUS_WIN
+        finalPath = fs::path(rus::GetProjectPath("default\\project_default.json"));
+#endif
+
+        printf("The final path is: %s\n", finalPath.string().c_str());
+
+        return finalPath;
+    }
+
+    bool CopyTemplate(Project &project, ProjectTemplate templ)
+    {
+        fs::path projectPath = GetUserProjectBaseDefaultDir(project);
+        fs::path templa = GetTemplatePath(templ);
+
+        printf("The final path is: %s\nThe Project Path is: %s\n", templa.string().c_str(), projectPath.string().c_str());
+        fs::copy_file(GetTemplatePath(templ), " C:\\Users\\Nicolini\\.Ricerco\\Projects\\ElPersa\\project_default.json", fs::copy_option::overwrite_if_exists);
+    }
+
+    bool CopyTemplate(fs::path &projectPath, ProjectTemplate templ)
+    {
+        fs::copy_file(GetTemplatePath(templ), projectPath, fs::copy_option::overwrite_if_exists);
+    }
+
     bool CheckProjectIntegrity(Project &project)
     {
         return true;

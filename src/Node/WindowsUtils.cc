@@ -94,7 +94,6 @@ namespace rus
 
         std::wstring folderPath = SelectFolderDialogue(hWndParent);
         /**
-         * WINDOWS ONLY
          * For a cross-platform support read:
          * https://stackoverflow.com/questions/42734715/how-can-i-convert-wstring-to-u16string/42743775#42743775
          * 
@@ -110,6 +109,16 @@ namespace rus
         }
 
         return resultStringPath;
+    }
+
+    std::wstring GetProjectPath(const std::wstring &relative)
+    {
+        WCHAR basePath[MAX_PATH];
+        GetModuleFileNameW(NULL, basePath, MAX_PATH);
+        PathRemoveFileSpecW(basePath);
+        PathAppend(basePath, (LPCWSTR)relative.c_str());
+
+        return std::wstring(basePath);
     }
 } // namespace rus
 #endif
