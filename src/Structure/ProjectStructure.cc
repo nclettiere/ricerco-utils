@@ -115,7 +115,7 @@ namespace rus
         return true;
     }
 
-    bool GenerateProjectStructure(const char *saveToPath, Project &project, boost::system::error_code &ec)
+    bool GenerateProjectStructure(std::wstring &saveToPath, Project &project, boost::system::error_code &ec)
     {
         std::vector<fs::path> discoverPaths;
         fs::path saveTo(saveToPath);

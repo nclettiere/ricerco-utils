@@ -17,23 +17,9 @@ namespace rus
         GenerateProjectUUID();
     }
 
-    Project::Project(std::string name, std::string description)
+    Project::Project(std::wstring name, std::wstring description)
         : _name(name),
           _description(description)
-    {
-        GenerateProjectUUID();
-    }
-
-    Project::Project(const char *name, const char *description)
-        : _name(name),
-          _description(description)
-    {
-        GenerateProjectUUID();
-    }
-
-    Project::Project(std::u16string name, std::u16string description)
-        : _name(name.c_str()),
-          _description(description.c_str())
     {
         GenerateProjectUUID();
     }
@@ -53,7 +39,7 @@ namespace rus
         return rus::GenerateProjectStructure(*this, ec);
     }
 
-    bool Project::CreateProject(const char *path, boost::system::error_code &ec)
+    bool Project::CreateProject(std::wstring &path, boost::system::error_code &ec)
     {
         return rus::GenerateProjectStructure(path, *this, ec);
     }

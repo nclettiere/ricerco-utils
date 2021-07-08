@@ -26,7 +26,7 @@ namespace rus
     fs::path GetProjectDir(ProjectDir projectDir, fs::path &projPath);
     fs::path GetUserProjectBaseDefaultDir(Project &project);
     bool GenerateProjectStructure(Project &project, boost::system::error_code &ec);
-    bool GenerateProjectStructure(const char *saveToPath, Project &project, boost::system::error_code &ec);
+    bool GenerateProjectStructure(std::wstring &saveToPath, Project &project, boost::system::error_code &ec);
     bool CheckProjectIntegrity(Project &project);
 
     static void DiscoverProjects(std::vector<fs::path> &projectPaths, fs::path &whereToFind);

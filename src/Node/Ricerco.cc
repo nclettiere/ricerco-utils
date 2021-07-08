@@ -23,8 +23,12 @@ namespace rus
             if (!options.Has("description"))
                 return Napi::String::New(env, "ERRNO_INVALID_ARGUMENT : Required entry 'description' could not be found.");
 
-            std::u16string name = options.Get("name").As<Napi::String>().Utf16Value();
-            std::u16string desc = options.Get("description").As<Napi::String>().Utf16Value();
+            std::wstring name;
+            std::u16string u16name = options.Get("name").As<Napi::String>().Utf16Value();
+            name.assign(u16name.begin(), u16name.end());
+            std::wstring desc;
+            std::u16string u16desc = options.Get("description").As<Napi::String>().Utf16Value();
+            desc.assign(u16desc.begin(), u16desc.end());
 
             Project newProj(name, desc);
 
@@ -33,7 +37,9 @@ namespace rus
 
             if (options.Has("path"))
             {
-                const char *path = options.Get("path").As<Napi::String>().Utf16Value().c_str();
+                std::wstring path;
+                std::string u16path = options.Get("path").As<Napi::String>().Utf16Value();
+                path.assign(u16path.begin(), u16path.end());
                 success = newProj.CreateProject(path, ec);
             }
             else

@@ -21,10 +21,10 @@ describe("Testing Ricerco Utils libs:", function () {
   }).timeout(Number.MAX_SAFE_INTEGER);
 });
 
-describe("Testing - CreateNewProject():", function () {
+describe("Testing - CreateNewProject() with english characters:", function () {
   it("The return value should be a valid windows path, an empty string or\n\tan error string (when platform is not windows ERRNO_WINDOWS_SUPPORT)", function () {
     chai
-      .expect(ricerco_utils?.CreateProject({ name: "ElPersa", description: "El Abdul de las arenas.", path: "C:\\Users\\Nicolini\\source\\repos\\XDÑá" }))
+      .expect(ricerco_utils?.CreateProject({ name: "ElPersaNÑó", description: "NÑóEl Abdul de las arenas.", path: "C:\\Users\\Micolash\\Documents\\nNÑó"}))
       .to.satisfy(function (path) {
         console.log("  Returned path from dialogue: '" + path + "'");
         return (

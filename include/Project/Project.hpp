@@ -20,22 +20,20 @@ namespace rus
 
     public:
         Project();
-        Project(std::string name, std::string description);
-        Project(std::u16string name, std::u16string description);
-        Project(const char *name, const char *description);
+        Project(std::wstring name, std::wstring description);
         ~Project();
 
     public:
-        std::string GetName() { return _name; }
-        std::string GetDescription() { return _description; }
+        std::wstring & GetName() { return _name; }
+        std::wstring & GetDescription() { return _description; }
 
-        void SetName(std::string &name) { _name = name; }
-        void SetDescription(std::string &description) { _description = description; }
+        void SetName(std::wstring &name) { _name = name; }
+        void SetDescription(std::wstring &description) { _description = description; }
     protected:
         void GenerateProjectUUID();
 
     public:
         bool CreateProject(boost::system::error_code &ec);
-        bool CreateProject(const char *path, boost::system::error_code &ec);
+        bool CreateProject(std::wstring &path, boost::system::error_code &ec);
     };
 }
