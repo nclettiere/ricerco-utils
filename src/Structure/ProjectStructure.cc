@@ -8,6 +8,8 @@
 #include <boost/system/error_category.hpp>
 #include <boost/system/errc.hpp>
 
+#include <Node/WindowsUtils.hpp>
+
 namespace rus
 {
     fs::path GetProjectDir(ProjectDir projectDir, Project &project)
@@ -182,7 +184,7 @@ namespace rus
         //}
 
 #ifdef RUS_WIN
-        finalPath = fs::path(rus::GetProjectPath("default\\project_default.json"));
+        finalPath = fs::path(GetProjectPath(L"default\\project_default.json").c_str());
 #endif
 
         printf("The final path is: %s\n", finalPath.string().c_str());
@@ -201,7 +203,7 @@ namespace rus
 
     bool CopyTemplate(fs::path &projectPath, ProjectTemplate templ)
     {
-        fs::copy_file(GetTemplatePath(templ), projectPath, fs::copy_option::overwrite_if_exists);
+        return fs::copy_file(GetTemplatePath(templ), projectPath, fs::copy_option::overwrite_if_exists);
     }
 
     bool CheckProjectIntegrity(Project &project)

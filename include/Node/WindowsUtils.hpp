@@ -1,7 +1,6 @@
 #include <napi.h>
 #include <rus_config.hpp>
 
-#ifdef RUS_WIN
 namespace rus
 {
     /**
@@ -16,4 +15,3 @@ namespace rus
     std::wstring GetProjectPath(const std::wstring &relative);
 
 } // namespace rus
-#endif

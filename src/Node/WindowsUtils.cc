@@ -4,8 +4,6 @@
 #include <sstream>
 #include <codecvt>
 
-#include <rus_config.hpp>
-
 #ifdef RUS_WIN
 namespace rus
 {
@@ -116,9 +114,11 @@ namespace rus
         WCHAR basePath[MAX_PATH];
         GetModuleFileNameW(NULL, basePath, MAX_PATH);
         PathRemoveFileSpecW(basePath);
-        PathAppend(basePath, (LPCWSTR)relative.c_str());
-
-        return std::wstring(basePath);
+        //PathAppend(basePath, relative.c_str());
+        LPWSTR dst = NULL;
+        PathCombineW(dst, basePath, relative.c_str());
+        
+        return std::wstring(dst);
     }
 } // namespace rus
 #endif

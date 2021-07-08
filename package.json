@@ -14,6 +14,7 @@
   "devDependencies": {
     "chai": "^4.3.4",
     "chai-match": "^1.1.1",
+    "cmake-js": "^6.1.0",
     "mocha": "^9.0.2"
   },
   "keywords": [
@@ -25,6 +26,6 @@
   "scripts": {
     "dev": "node ./node_modules/mocha/bin/mocha",
     "devi": "node-gyp build && node ./node_modules/mocha/bin/mocha",
-    "install": "node-gyp --MSVS_VERSION=2019 configure && node-gyp --MSVS_VERSION=2019 build"
+    "install": "cmake-js --debug=false compile"
   }
 }
