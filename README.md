@@ -28,11 +28,11 @@ You can build for a lot platforms and architectures.<br></p>
 const { ricerco_utils } = require("ricerco-utils"); // Electron and other Node apps
 const { ricerco_utils } = nw.require("ricerco-utils"); // NW.JS
 
-console.log(filemanager.WinSelectFolderDialogue( --> leave empty <-- )); // Cannot freeze the window input.
+console.log(filemanager.WinSelectFolderDialogue( '--> leave empty <--' )); // Cannot freeze the window input and bring the dialogue on top.
 // or
-console.log(filemanager.WinSelectFolderDialogue( '--> Buffer containing a window handle (Only supports HWND for now) <--' ));
+console.log(filemanager.WinSelectFolderDialogue( '--> Buffer containing a window handle <--' ));
 // or
-console.log(filemanager.WinSelectFolderDialogue( '--> JS Number with a window PID (Only supports Windows PID for now) <--' ));
+console.log(filemanager.WinSelectFolderDialogue( '--> JS Number with a window PID <--' ));
 ```
 
 #### Example in Electron:
@@ -57,7 +57,7 @@ const folderPath = ricerco_utils.WinSelectFolderDialogue(
   - MacOS and Linux support.
   - pre-built binaries.
 
-#### Dependencies (see the vendor folder for more info.):
+#### Dependencies (see the vendor folder for more info):
   - [Boost Filesystem](https://github.com/boostorg/filesystem)
   - [nlohmann's json lib](https://github.com/nlohmann/json)
   - [cereal lib](https://github.com/USCiLab/cereal)
