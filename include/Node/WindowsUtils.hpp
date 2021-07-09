@@ -6,7 +6,7 @@ namespace rus
     /**
      * @brief (NAPI Method) Opens a native Windows dialogue to select a folder. (>=Windows Vista)
      * 
-     * @param info This parameter should ONLY contain one argument and must be a JS buffer containg an HWND handle.
+     * @param info (Optional) Either a JS buffer containing the parent window HWND or the PID Number of the window.
      * @return (JS String) returns either the selected dialogue path or an empty string.
      * @since (>=Windows Vista)
      * @author Nicolas Cabrera Lettiere

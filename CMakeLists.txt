@@ -47,3 +47,11 @@ if (MSVC)
         ${BOOST_FS} 
         "Shlwapi.lib")
 endif (MSVC)
+
+## Copies the default directory to the lib folder
+add_custom_command(
+    TARGET "ricerco-utils"
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${CMAKE_SOURCE_DIR}/default/"
+    "${CMAKE_BINARY_DIR}/Release/default/")

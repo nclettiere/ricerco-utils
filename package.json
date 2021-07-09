@@ -23,6 +23,11 @@
   "engines": {
     "node": ">=0.8.x"
   },
+  "cmake-js": {
+    "runtime": "nw",
+    "runtimeVersion": "0.54.1",
+    "arch": "x64"
+  },
   "scripts": {
     "dev": "node ./node_modules/mocha/bin/mocha",
     "devi": "node-gyp build && node ./node_modules/mocha/bin/mocha",

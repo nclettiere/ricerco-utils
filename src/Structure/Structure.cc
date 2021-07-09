@@ -10,9 +10,21 @@ namespace rus
     */
     std::string GetHomeDir()
     {
+        std::string homeDir;
+#ifdef _MSC_VER
+        char *buf = nullptr;
+        size_t sz = 0;
+        if (_dupenv_s(&buf, &sz, G_homeVar.c_str()) == 0 && buf != nullptr)
+        {
+            homeDir = buf;
+            free(buf);
+        }
+#else
         if (getenv(G_homeVar.c_str()) == NULL)
             return "";
-        return std::string(getenv(G_homeVar.c_str()));
+        homeDir = getenv(G_homeVar.c_str());
+#endif
+        return homeDir;
     }
 
     fs::path GetRicercoDir(RicercoDir ricercoDir)

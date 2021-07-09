@@ -10,17 +10,31 @@ npm i ricerco-utils
 ```
 Usage
 ```javascript
-const filemanager = require('ricerco-utils').filemanager;
+const { ricerco_utils } = require("ricerco-utils"); // Electron and other Node apps
+const { ricerco_utils } = nw.require("ricerco-utils"); // NW.JS
 
-console.log(filemanager.select_folder_dialogue( --> leave empty <-- )); // Cant freeze the window input.
+console.log(filemanager.WinSelectFolderDialogue( --> leave empty <-- )); // Cannot freeze the window input.
 // or
-console.log(filemanager.select_folder_dialogue( --> Buffer containing a window handle (Only supports HWND for now) <-- ));
+console.log(filemanager.WinSelectFolderDialogue( '--> Buffer containing a window handle (Only supports HWND for now) <--' ));
+// or
+console.log(filemanager.WinSelectFolderDialogue( '--> JS Number with a window PID (Only supports Windows PID for now) <--' ));
 ```
 
 Example in electron:
 ```javascript
-const folderPath = filemanager.select_folder_dialogue(
+const { ricerco_utils } = require("ricerco-utils");
+const folderPath = ricerco_utils.WinSelectFolderDialogue(
     mainWindow?.getNativeWindowHandle() // This line gets the buffer
+);
+```
+
+Example in NW.JS:
+```javascript
+const { ricerco_utils } = nw.require("ricerco-utils");
+// NW.JS Window does not have a method for obtaining the window handle so
+// We use the parent window PID.
+const folderPath = ricerco_utils.WinSelectFolderDialogue(
+    process.ppid // Important to use ppid instead of pid ; ppid returns the parent window PID.
 );
 ```
 

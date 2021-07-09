@@ -1,6 +1,8 @@
 #include <Node/WindowsUtils.hpp>
 #include <napi.h>
 
+#include <iostream>
+
 #include <sstream>
 #include <codecvt>
 
@@ -23,11 +25,52 @@ namespace rus
         return strTo;
     }
 
+    // Structure used to communicate data from and to enumeration procedure
+    struct EnumData
+    {
+        DWORD dwProcessId;
+        HWND hWnd;
+    };
+
+    // Application-defined callback for EnumWindows
+    BOOL CALLBACK EnumProc(HWND hWnd, LPARAM lParam)
+    {
+        // Retrieve storage location for communication data
+        EnumData &ed = *(EnumData *)lParam;
+        DWORD dwProcessId = 0x0;
+        // Query process ID for hWnd
+        GetWindowThreadProcessId(hWnd, &dwProcessId);
+        // Apply filter - if you want to implement additional restrictions,
+        // this is the place to do so.
+        if (ed.dwProcessId == dwProcessId)
+        {
+            // Found a window matching the process ID
+            ed.hWnd = hWnd;
+            // Report success
+            SetLastError(ERROR_SUCCESS);
+            // Stop enumeration
+            return FALSE;
+        }
+        // Continue enumeration
+        return TRUE;
+    }
+
+    HWND FindWindowFromProcessId(DWORD dwProcessId)
+    {
+        EnumData ed = {dwProcessId};
+        if (!EnumWindows(EnumProc, (LPARAM)&ed) &&
+            (GetLastError() == ERROR_SUCCESS))
+        {
+            return ed.hWnd;
+        }
+        return NULL;
+    }
+
     // Select folder dialogue for Windows. (Min req. Win >= Vista)
-    std::wstring SelectFolderDialogue(HWND *hWndParent)
+    std::wstring SelectFolderDialogue(HWND hWndParent)
     {
         if (hWndParent != NULL)
-            EnableWindow(*hWndParent, FALSE);
+            EnableWindow(hWndParent, FALSE);
 
         std::wostringstream woss;
         PWSTR pszFilePath;
@@ -72,7 +115,7 @@ namespace rus
         }
 
         if (hWndParent != NULL)
-            EnableWindow(*hWndParent, TRUE);
+            EnableWindow(hWndParent, TRUE);
 
         return woss.str();
     }
@@ -83,11 +126,18 @@ namespace rus
         Napi::String resultStringPath;
 
         // Get HWND of the parent window to disable it while the dialogue box is open.
-        HWND *hWndParent;
+        HWND hWndParent;
         if (info[0].IsBuffer())
         {
+            // With Buffer Handle
             Napi::Buffer<HWND> buf = info[0].As<Napi::Buffer<HWND>>();
-            hWndParent = buf.Data();
+            hWndParent = *buf.Data();
+        }
+        else if (info[0].IsNumber())
+        {
+            // With PID
+            Napi::Number pid = info[0].As<Napi::Number>();
+            hWndParent = FindWindowFromProcessId((DWORD)pid.Uint32Value());
         }
 
         std::wstring folderPath = SelectFolderDialogue(hWndParent);
@@ -102,23 +152,24 @@ namespace rus
         resultStringPath = Napi::String::From(env, u16str);
 
         if (hWndParent != NULL)
-        {
-            SetFocus(*hWndParent);
-        }
+            SetFocus(hWndParent);
 
         return resultStringPath;
     }
 
     std::wstring GetProjectPath(const std::wstring &relative)
     {
+        std::wstring res;
         WCHAR basePath[MAX_PATH];
         GetModuleFileNameW(NULL, basePath, MAX_PATH);
-        PathRemoveFileSpecW(basePath);
-        //PathAppend(basePath, relative.c_str());
-        LPWSTR dst = NULL;
-        PathCombineW(dst, basePath, relative.c_str());
-        
-        return std::wstring(dst);
+
+        if (!PathRemoveFileSpecW(basePath))
+            return res;
+        if (!PathAppendW(basePath, relative.c_str()))
+            return res;
+
+        res = std::wstring(basePath);
+        return res;
     }
 } // namespace rus
 #endif
