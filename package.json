@@ -1,6 +1,6 @@
 {
   "name": "ricerco-utils",
-  "version": "0.1.5",
+  "version": "1.0.0-alpha.0",
   "description": "C++ fileSystem OS specific bindings for the Ricerco application.",
   "main": "index.js",
   "license": "MIT",
@@ -26,7 +26,8 @@
   "cmake-js": {
     "runtime": "nw",
     "runtimeVersion": "0.54.1",
-    "arch": "x64"
+    "arch": "x64",
+    "debug": false
   },
   "scripts": {
     "dev": "node ./node_modules/mocha/bin/mocha",
