@@ -35,6 +35,13 @@ file(GLOB_RECURSE SOURCE_FILES "src/*.cc")
 add_library("ricerco-utils" SHARED ${SOURCE_FILES} ${CMAKE_JS_SRC})
 set_target_properties("ricerco-utils" PROPERTIES PREFIX "" SUFFIX ".node")
 
+message(STATUS "*************************************************************")
+message(STATUS "*   THE SELECTED RUNTIME TO BUILD IS: ${NODE_RUNTIME}")
+message(STATUS "*   THE SELECTED RUNTIME VERSION IS: ${NODE_RUNTIMEVERSION}")
+message(STATUS "*   THE SELECTED ARCHITECTURE IS: ${NODE_ARCH}")
+message(STATUS "*************************************************************")
+message(STATUS "*************************************************************")
+
 if (WIN32)
     if (MSVC)
         set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
