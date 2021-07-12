@@ -5,88 +5,124 @@
 
 #include <stdio.h>
 
+#include <boost/filesystem.hpp>
+#include <boost/system/error_code.hpp>
+namespace fs = boost::filesystem;
+
 namespace rus
 {
-    Napi::Value CreateProject(const Napi::CallbackInfo &info)
+  Napi::Value CreateProject(const Napi::CallbackInfo &info)
+  {
+    Napi::Env env = info.Env();
+
+    if (!info.Length() == 1)
+      return Napi::String::New(env, "ERRNO_INVALID_METHOD_OVERLOADING");
+
+    if (info[0].IsObject())
     {
-        Napi::Env env = info.Env();
+      Napi::Object options = info[0].As<Napi::Object>();
 
-        if (!info.Length() == 1)
-            return Napi::String::New(env, "ERRNO_INVALID_ARGUMENT_NUMBER");
+      if (!options.Has("name"))
+        return Napi::String::New(env, "ERRNO_INVALID_ARGUMENT : Required entry 'name' could not be found.");
+      if (!options.Has("description"))
+        return Napi::String::New(env, "ERRNO_INVALID_ARGUMENT : Required entry 'description' could not be found.");
 
-        if (info[0].IsObject())
-        {
-            Napi::Object options = info[0].As<Napi::Object>();
+      std::wstring name;
+      std::u16string u16name = options.Get("name").As<Napi::String>().Utf16Value();
+      name.assign(u16name.begin(), u16name.end());
+      std::wstring desc;
+      std::u16string u16desc = options.Get("description").As<Napi::String>().Utf16Value();
+      desc.assign(u16desc.begin(), u16desc.end());
 
-            if (!options.Has("name"))
-                return Napi::String::New(env, "ERRNO_INVALID_ARGUMENT : Required entry 'name' could not be found.");
-            if (!options.Has("description"))
-                return Napi::String::New(env, "ERRNO_INVALID_ARGUMENT : Required entry 'description' could not be found.");
+      Project newProj(name, desc);
 
-            std::wstring name;
-            std::u16string u16name = options.Get("name").As<Napi::String>().Utf16Value();
-            name.assign(u16name.begin(), u16name.end());
-            std::wstring desc;
-            std::u16string u16desc = options.Get("description").As<Napi::String>().Utf16Value();
-            desc.assign(u16desc.begin(), u16desc.end());
+      boost::system::error_code ec;
+      bool pCreationSuccess;
 
-            Project newProj(name, desc);
+      // Create the project
+      if (options.Has("path"))
+      {
+        std::wstring path;
+        std::u16string u16path = options.Get("path").As<Napi::String>().Utf16Value();
+        path.assign(u16path.begin(), u16path.end());
+        pCreationSuccess = newProj.CreateProject(path, ec);
+      }
+      else
+      {
+        pCreationSuccess = newProj.CreateProject(ec);
+      }
+      if (!pCreationSuccess)
+        return Napi::String::New(env, ec.message());
 
-            boost::system::error_code ec;
-            bool pCreationSuccess;
+      // Copy the selected template (or use the default)
+      if (!options.Has("template"))
+      {
+        // load default
+        rus::CopyTemplate(newProj, rus::ProjectTemplate::Default);
+      }
 
-            // Create the project
-            if (options.Has("path"))
-            {
-                std::wstring path;
-                std::u16string u16path = options.Get("path").As<Napi::String>().Utf16Value();
-                path.assign(u16path.begin(), u16path.end());
-                pCreationSuccess = newProj.CreateProject(path, ec);
-            }
-            else
-            {
-                pCreationSuccess = newProj.CreateProject(ec);
-            }
-            if (!pCreationSuccess)
-                return Napi::String::New(env, ec.message());
+      return Napi::String::New(env, "API_CreateProject_SUCCESS");
+    }
+    return Napi::String::New(env, "ABC 1");
+  }
 
-            // Copy the selected template (or use the default)
-            if (!options.Has("template"))
-            {
-                // load default
-                rus::CopyTemplate(newProj, rus::ProjectTemplate::Default);
-            }
+  Napi::Value DiscoverProjects(const Napi::CallbackInfo &info)
+  {
+    Napi::Env env = info.Env();
 
-            return Napi::String::New(env, "API_CreateProject_SUCCESS");
-        }
-        return Napi::String::New(env, "ABC 1");
+    fs::path whereToFind;
+
+    if (info.Length() == 1)
+    {
+      if (info[0].IsString())
+      {
+        Napi::String path = info[0].As<Napi::String>();
+        whereToFind = fs::path(path.Utf8Value().c_str());
+      }
+      else
+      {
+        return Napi::String::New(env, "ERRNO_INVALID_ARGUMENT_TYPE");
+      }
+    }
+    else if (info.Length() > 1)
+    {
+      return Napi::String::New(env, "ERRNO_INVALID_METHOD_OVERLOADING");
+    }
+    else
+    {
+      // Default path
+      whereToFind = rus::GetRicercoDir(RicercoDir::Projects);
     }
 
-    Napi::Value DiscoverProjects(const Napi::CallbackInfo &info)
-    {
-        Napi::Env env = info.Env();
-        printf("XD   DiscoverProjects\n");
-        return Napi::String::New(env, "ABC 12");
+    std::vector<fs::path> projectsPaths;
+
+    rus::FindProjects(projectsPaths, whereToFind);
+
+    for(fs::path p : projectsPaths) {
+      printf("Discovered project: %s", p.string().c_str());
     }
 
-    Napi::Value IsProjectAvailable(const Napi::CallbackInfo &info)
-    {
-        Napi::Env env = info.Env();
-        printf("XD   IsProjectAvailable\n");
-        return Napi::String::New(env, "ABC 123");
-    }
+    return Napi::String::New(env, "ABC 12");
+  }
 
-    Napi::Value ReadProjectContents(const Napi::CallbackInfo &info)
-    {
-        Napi::Env env = info.Env();
-        printf("XD   ReadProjectContents\n");
-        return Napi::String::New(env, "ABC 1234");
-    }
+  Napi::Value IsProjectAvailable(const Napi::CallbackInfo &info)
+  {
+    Napi::Env env = info.Env();
+    printf("XD   IsProjectAvailable\n");
+    return Napi::String::New(env, "ABC 123");
+  }
 
-    Napi::Value UpdateProject(const Napi::CallbackInfo &info)
-    {
-        Napi::Env env = info.Env();
-        printf("XD   UpdateProject\n");
-        return Napi::String::New(env, "ABC 12345");
-    }
+  Napi::Value ReadProjectContents(const Napi::CallbackInfo &info)
+  {
+    Napi::Env env = info.Env();
+    printf("XD   ReadProjectContents\n");
+    return Napi::String::New(env, "ABC 1234");
+  }
+
+  Napi::Value UpdateProject(const Napi::CallbackInfo &info)
+  {
+    Napi::Env env = info.Env();
+    printf("XD   UpdateProject\n");
+    return Napi::String::New(env, "ABC 12345");
+  }
 } // namespace rus

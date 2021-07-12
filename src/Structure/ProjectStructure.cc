@@ -90,7 +90,7 @@ namespace rus
     bool GenerateProjectStructure(Project &project, boost::system::error_code &ec)
     {
         std::vector<fs::path> discoverPaths;
-        DiscoverProjects(discoverPaths, GetRicercoDir(RicercoDir::Projects));
+        FindProjects(discoverPaths, GetRicercoDir(RicercoDir::Projects));
 
         for (auto it = begin(discoverPaths); it != end(discoverPaths); ++it)
         {
@@ -123,7 +123,7 @@ namespace rus
         fs::path saveTo(saveToPath);
         fs::path projPath(saveTo / project.GetName());
 
-        DiscoverProjects(discoverPaths, saveTo);
+        FindProjects(discoverPaths, saveTo);
 
         for (auto it = begin(discoverPaths); it != end(discoverPaths); ++it)
         {
@@ -150,7 +150,7 @@ namespace rus
         return true;
     }
 
-    static void DiscoverProjects(std::vector<fs::path> &projectPaths, fs::path &whereToFind)
+    void FindProjects(std::vector<fs::path> &projectPaths, fs::path &whereToFind)
     {
         if (is_directory(whereToFind))
         {
