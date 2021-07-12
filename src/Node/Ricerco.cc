@@ -95,14 +95,25 @@ namespace rus
     }
 
     std::vector<fs::path> projectsPaths;
+    Napi::Array JS_projectsPaths;
 
-    rus::FindProjects(projectsPaths, whereToFind);
+    FindProjects(projectsPaths, whereToFind);
 
-    for(fs::path p : projectsPaths) {
-      printf("Discovered project: %s", p.string().c_str());
+    if (projectsPaths.size() > 0)
+    {
+      JS_projectsPaths = Napi::Array::New(info.Env(), projectsPaths.size());
+
+      size_t i = 0;
+      for (auto it = projectsPaths.begin(); it != projectsPaths.end(); ++it)
+      {
+        JS_projectsPaths[i] = Napi::String::New(env, it->string());
+        i++;
+      }
+    }else {
+      JS_projectsPaths = Napi::Array::New(info.Env(), 0);
     }
 
-    return Napi::String::New(env, "ABC 12");
+    return JS_projectsPaths;
   }
 
   Napi::Value IsProjectAvailable(const Napi::CallbackInfo &info)

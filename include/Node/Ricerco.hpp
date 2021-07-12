@@ -9,7 +9,7 @@ namespace rus
      *
      * @param info A dictionary containing Name, Description and optionally a path.
      * @param info If the path is omitted, it will use the default projects path on the user home directory.
-     * @return (JS Boolean) If the project is created successfully returns true.
+     * @return [MaybeError] (JS Boolean) If the project is created successfully returns true.
      * @author Nicolas Cabrera Lettiere
      */
     Napi::Value CreateProject(const Napi::CallbackInfo &info);
@@ -19,7 +19,7 @@ namespace rus
      *
      * @param info (Optional) A JS string containing the desired path to search for projects.
      * @param info If the path is omitted, it will use the default projects path on the user home directory.
-     * @return (JS String Array) All projects PATHS located in this directory.
+     * @return [MaybeError] (JS String Array) All projects PATHS located in this directory.
      * @author Nicolas Cabrera Lettiere
      */
     Napi::Value DiscoverProjects(const Napi::CallbackInfo &info);

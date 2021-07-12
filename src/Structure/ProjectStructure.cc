@@ -159,10 +159,10 @@ namespace rus
             {
                 if (is_directory(projectFolder))
                 {
-                    // Search for project entry file (.rop)
+                    // Search for project entry file (.rco)
                     for (auto &pEntry : boost::make_iterator_range(fs::directory_iterator(projectFolder), {}))
                     {
-                        if (fs::is_regular_file(pEntry) && fs::extension(pEntry) == ".rop")
+                        if (fs::is_regular_file(pEntry) && fs::extension(pEntry) == ".rco")
                         {
                             projectPaths.push_back(pEntry);
                         }
