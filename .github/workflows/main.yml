@@ -1,4 +1,4 @@
-name: ricerco-uitls package
+name: ricerco-utils package
 
 on:
   release:
