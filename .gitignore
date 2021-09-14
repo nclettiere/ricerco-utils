@@ -1,4 +1,6 @@
 .vscode
 build
 node_modules
-node_modules/
+vendor/boost
+vendor/filesystem
+vendor/boost_lib.zip

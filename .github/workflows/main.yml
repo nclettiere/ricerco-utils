@@ -1,4 +1,4 @@
-name: ricerco-uitls-package
+name: ricerco-utils package
 
 on:
   release:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: windows-2019
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -16,7 +16,7 @@ jobs:
 
   publish-gpr:
     needs: build
-    runs-on: self-hosted
+    runs-on: windows-2019
     permissions:
       packages: write
       contents: read

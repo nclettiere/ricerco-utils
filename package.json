@@ -1,6 +1,6 @@
 {
   "name": "ricerco-utils",
-  "version": "0.1.5",
+  "version": "1.0.0-alpha.1",
   "description": "C++ fileSystem OS specific bindings for the Ricerco application.",
   "main": "index.js",
   "license": "MIT",
@@ -11,15 +11,27 @@
   "dependencies": {
     "node-addon-api": "^4.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "chai-match": "^1.1.1",
+    "cmake-js": "^6.1.0",
+    "mocha": "^9.0.2"
+  },
   "keywords": [
     "addon"
   ],
   "engines": {
     "node": ">=0.8.x"
   },
+  "cmake-js": {
+    "runtime": "nw",
+    "runtimeVersion": "0.54.1",
+    "arch": "x64",
+    "debug": false
+  },
   "scripts": {
-    "dev": "node test/test.js",
-    "install": "node-gyp rebuild"
+    "dev": "node ./node_modules/mocha/bin/mocha",
+    "devi": "node-gyp build && node ./node_modules/mocha/bin/mocha",
+    "install": "cmake-js --debug=false compile"
   }
 }

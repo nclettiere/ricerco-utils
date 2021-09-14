@@ -1,2 +1,2 @@
-const filemanager = require('./build/Release/filemanager.node');
-module.exports.filemanager = filemanager;
+const ricerco_utils = require('./build/Release/ricerco-utils');
+module.exports.ricerco_utils = ricerco_utils;
