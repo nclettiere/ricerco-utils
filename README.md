@@ -5,6 +5,9 @@ Allows to access OS specific filesystem features which are not present on Node.j
 
 Install
 ```shell
+yarn global add cmake-js
+npm i -g cmake-js
+---
 yarn add ricerco-utils
 npm i ricerco-utils
 ```
