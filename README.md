@@ -15,12 +15,13 @@ Take a look at Cmake-js [docs](https://github.com/cmake-js/cmake-js)
 You can build for a lot platforms and architectures.<br></p>
 
 ```shell
-# modify package.json to fit your needs.
+# modify node_modules/ricerco-utils/package.json file to fit your needs.
   "cmake-js": {
     "runtime": "nw", # "node" | "electron" | "nw"
-    "runtimeVersion": "0.54.1",
+    "runtimeVersion": "0.59.1",
     "arch": "x64" # "x64" | "ia32" | "arm64" | "arm"
   }
+# Then you should rebuild the module to apply the changes.
 ```
 
 #### Usage
@@ -54,6 +55,7 @@ const folderPath = ricerco_utils.WinSelectFolderDialogue(
 ```
 
 #### TODO:
+  - Implement more APIs
   - MacOS and Linux support.
   - pre-built binaries.
 
