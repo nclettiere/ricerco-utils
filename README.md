@@ -27,11 +27,9 @@ You can build for a lot platforms and architectures.<br></p>
 #### Usage
 ```javascript
 const { ricerco_utils } = require("ricerco-utils"); // Electron and other Node apps
-const { ricerco_utils } = nw.require("ricerco-utils"); // NW.JS
+const { ricerco_utils } = nw.require("ricerco-utils"); // NW.JS (in some cases, the 'nw.' part can be omitted)
 
-console.log(filemanager.WinSelectFolderDialogue( '--> leave empty <--' )); // Cannot freeze the window input and bring the dialogue on top.
-// or
-console.log(filemanager.WinSelectFolderDialogue( '--> Buffer containing a window handle <--' ));
+console.log(filemanager.WinSelectFolderDialogue( '--> leave empty <--' )); // The main window remains active while the PickFolder dialogue is showing.
 // or
 console.log(filemanager.WinSelectFolderDialogue( '--> JS Number with a window PID <--' ));
 ```
@@ -40,7 +38,7 @@ console.log(filemanager.WinSelectFolderDialogue( '--> JS Number with a window PI
 ```javascript
 const { ricerco_utils } = require("ricerco-utils");
 const folderPath = ricerco_utils.WinSelectFolderDialogue(
-    mainWindow?.getNativeWindowHandle() // This line gets the buffer
+    require('electron').remote.getCurrentWebContents().getOSProcessId() // Not tested
 );
 ```
 
@@ -55,11 +53,11 @@ const folderPath = ricerco_utils.WinSelectFolderDialogue(
 ```
 
 #### TODO:
-  - Implement more APIs
+  - Implement more APIs.
+  - Remove junk.
+  - Implement CMake variables to customize the library.
   - MacOS and Linux support.
   - pre-built binaries.
 
 #### Dependencies (see the vendor folder for more info):
-  - [Boost Filesystem](https://github.com/boostorg/filesystem)
-  - [nlohmann's json lib](https://github.com/nlohmann/json)
-  - [cereal lib](https://github.com/USCiLab/cereal)
+  - [Native File Dialog Extended](https://github.com/btzy/nativefiledialog-extended)
