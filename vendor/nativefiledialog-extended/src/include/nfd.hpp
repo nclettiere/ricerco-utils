@@ -57,8 +57,8 @@ inline nfdresult_t SaveDialog(nfdnchar_t*& outPath,
 }
 
 inline nfdresult_t PickFolder(nfdnchar_t*& outPath,
-                              const nfdnchar_t* defaultPath = nullptr) noexcept {
-    return ::NFD_PickFolderN(&outPath, defaultPath);
+                              const nfdnchar_t* defaultPath = nullptr, HWND parent = NULL) noexcept {
+    return ::NFD_PickFolderN(&outPath, defaultPath, parent);
 }
 
 inline const char* GetError() noexcept {
@@ -120,8 +120,9 @@ inline nfdresult_t SaveDialog(nfdu8char_t*& outPath,
 }
 
 inline nfdresult_t PickFolder(nfdu8char_t*& outPath,
-                              const nfdu8char_t* defaultPath = nullptr) noexcept {
-    return ::NFD_PickFolderU8(&outPath, defaultPath);
+                              const nfdu8char_t* defaultPath = nullptr,
+							  HWND parent = NULL) noexcept {
+    return ::NFD_PickFolderU8(&outPath, defaultPath, parent);
 }
 
 namespace PathSet {
@@ -268,9 +269,10 @@ inline nfdresult_t SaveDialog(UniquePathU8& outPath,
 }
 
 inline nfdresult_t PickFolder(UniquePathU8& outPath,
-                              const nfdu8char_t* defaultPath = nullptr) noexcept {
+                              const nfdu8char_t* defaultPath = nullptr,
+							  HWND parent = NULL) noexcept {
     nfdu8char_t* out;
-    nfdresult_t res = PickFolder(out, defaultPath);
+    nfdresult_t res = PickFolder(out, defaultPath, parent);
     if (res == NFD_OKAY) {
         outPath.reset(out);
     }

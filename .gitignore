@@ -4,3 +4,5 @@ node_modules
 vendor/boost
 vendor/filesystem
 vendor/boost_lib.zip
+.bak
+*.bak

@@ -43,7 +43,7 @@ message(STATUS "*************************************************************")
 message(STATUS "*************************************************************")
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/vendor/nativefiledialog-extended)
-target_link_libraries("ricerco-utils" PRIVATE nfd ole32.lib uuid.lib)
+target_link_libraries("ricerco-utils" PRIVATE ${CMAKE_JS_LIB} nfd ole32.lib uuid.lib)
 
 ## Copies the default directory to the lib folder
 add_custom_command(

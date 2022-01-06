@@ -4,6 +4,13 @@
 #ifdef RUS_WIN
 namespace rus
 {
+	/**
+	 *  @brief Calls the native file dialogue for picking a folder.
+	 *
+	 * @param info Function callback (res, err, cancel)
+	 * @author Nicolas Cabrera Lettiere
+	 */
+	void SelectFolder(const Napi::CallbackInfo &info);
     /**
      *  @brief Creates a new Ricerco project.
      *
@@ -12,7 +19,7 @@ namespace rus
      * @return [MaybeError] (JS Boolean) If the project is created successfully returns true.
      * @author Nicolas Cabrera Lettiere
      */
-    Napi::Value CreateProject(const Napi::CallbackInfo &info);
+    //Napi::Value CreateProject(const Napi::CallbackInfo &info);
 
     /**
      *  @brief Searches for projects inside a directory. Specifically for .rco project files.
@@ -22,7 +29,7 @@ namespace rus
      * @return [MaybeError] (JS String Array) All projects PATHS located in this directory.
      * @author Nicolas Cabrera Lettiere
      */
-    Napi::Value DiscoverProjects(const Napi::CallbackInfo &info);
+    //Napi::Value DiscoverProjects(const Napi::CallbackInfo &info);
 
     /**
      *  @brief Checks if a project with certain name and path can be placed and created in a directory.
@@ -32,7 +39,7 @@ namespace rus
      * @return (JS String Array) All projects PATHS located in this directory.
      * @author Nicolas Cabrera Lettiere
      */
-    Napi::Value IsProjectAvailable(const Napi::CallbackInfo &info);
+    //Napi::Value IsProjectAvailable(const Napi::CallbackInfo &info);
 
     /**
      *  @brief Opens a project and encodes it contents to JSON format.
@@ -41,7 +48,7 @@ namespace rus
      * @return (JS String) A JSON string.
      * @author Nicolas Cabrera Lettiere
      */
-    Napi::Value ReadProjectContents(const Napi::CallbackInfo &info);
+    //Napi::Value ReadProjectContents(const Napi::CallbackInfo &info);
 
     /**
      *  @brief Updates a desired project with new data.
@@ -50,6 +57,6 @@ namespace rus
      * @return (JS Boolean) If all updates were successful, returns true.
      * @author Nicolas Cabrera Lettiere
      */
-    Napi::Value UpdateProject(const Napi::CallbackInfo &info);
+    //Napi::Value UpdateProject(const Napi::CallbackInfo &info);
 } // namespace rus
 #endif

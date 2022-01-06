@@ -30,7 +30,7 @@ Napi::Object Init_Ricerco(Napi::Env env, Napi::Object exports)
     // WindowsUtils
 #ifdef RUS_WIN
     exports.Set(Napi::String::New(env, "WinSelectFolderDialogue"),
-                Napi::Function::New(env, rus::Win_SelFolder));
+                Napi::Function::New(env, rus::SelectFolder));
 #else
     exports.Set(Napi::String::New(env, "SelectFolderDialogue"),
                 Napi::Function::New(env, Win_PlatformErr));
