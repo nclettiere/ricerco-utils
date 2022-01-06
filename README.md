@@ -3,7 +3,10 @@ C++ bindings for the Ricerco application.
 
 Allows to access OS specific filesystem features which are not present on Node.js applications.
 
-Install
+#### Features
+ - Open a native 'Select Folder' dialogue
+
+#### Install
 ```shell
 yarn add ricerco-utils
 npm i ricerco-utils
@@ -21,7 +24,7 @@ You can build for a lot platforms and architectures.<br></p>
     "runtimeVersion": "0.59.1",
     "arch": "x64" # "x64" | "ia32" | "arm64" | "arm"
   }
-# Then you should rebuild the module to apply the changes.
+# Then you should rebuild the module or do an 'npm install' to apply the changes.
 ```
 
 #### Usage
