@@ -1,5 +1,9 @@
 # ricerco-utils
 
+### Project is archived as modern electron and NW.js provides access to this bindings.
+
+---
+
 Allows to access OS specific filesystem features which are not present on normal electron/nw.js applications.
 
 #### Features
