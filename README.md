@@ -1,7 +1,6 @@
 # ricerco-utils
-C++ bindings for the Ricerco application.
 
-Allows to access OS specific filesystem features which are not present on Node.js applications.
+Allows to access OS specific filesystem features which are not present on normal electron/nw.js applications.
 
 #### Features
  - Open a native 'Select Folder' dialogue
